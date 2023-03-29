@@ -1,7 +1,6 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 
 /**
@@ -110,6 +109,7 @@ public class CelebrityPanel extends JPanel implements ActionListener{
     success = "You guessed correctly!!! \nNext Celebrity clue is: ";
     tryAgain = "You have chosen poorly, try again!\nThe clue is: ";
     seconds = 60;
+    countdownTimer = new Timer(1000, null);
 
     setupPanel();
     setupLayout();
@@ -177,6 +177,8 @@ public class CelebrityPanel extends JPanel implements ActionListener{
    */
   private void setupListeners() {
     guessButton.addActionListener(this);
+    countdownTimer.addActionListener(this);
+    countdownTimer.start();
   }
   
   /**
@@ -185,7 +187,15 @@ public class CelebrityPanel extends JPanel implements ActionListener{
    * the end.
    */
   private void timerFires() {
-
+    seconds--;
+    dynamicTimerLabel.setText("" + seconds);
+    if (seconds == 0) {
+      countdownTimer.stop();
+      staticTimerLabel.setText("TIMES UP! YOU LOSE!!");
+      dynamicTimerLabel.setText("");
+      guessButton.setEnabled(false);
+      guessField.setEnabled(false);
+    }
   }
   
   /**
@@ -196,6 +206,9 @@ public class CelebrityPanel extends JPanel implements ActionListener{
    */
   public void addClue(String clue) {
     clueArea.setText("The clue is: " + clue);
+    seconds = 60;
+    dynamicTimerLabel.setText("" + seconds);
+    countdownTimer.restart();
   }
   
   /**
@@ -218,6 +231,9 @@ public class CelebrityPanel extends JPanel implements ActionListener{
 
     if (controller.getCelebrityGameSize() == 0) {
       clueArea.append("\nThere are no more celebrities left on the list!");
+      countdownTimer.stop();
+      staticTimerLabel.setText("YOU WIN!");
+      dynamicTimerLabel.setText("");
       guessButton.setEnabled(false);
       guessField.setEnabled(false);
     }
@@ -225,11 +241,14 @@ public class CelebrityPanel extends JPanel implements ActionListener{
 
   public void actionPerformed(ActionEvent ae) {
     Object source = ae.getSource();
-    JButton button = (JButton) source;
-    String buttonText = button.getText();
-
-    if (buttonText.equals("Submit guess")) {
-      updateScreen();
+    if (source instanceof Timer) {
+      timerFires();
+    } else if (source instanceof  JButton) {
+      JButton button = (JButton) source;
+      String buttonText = button.getText();
+      if (buttonText.equals("Submit guess")) {
+        updateScreen();
+      }
     }
   }
 }
