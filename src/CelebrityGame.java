@@ -39,7 +39,20 @@ public class CelebrityGame {
 	 *         spaces.
 	 */
 	public boolean processGuess(String guess) {
-		return false; // stub
+		boolean match = false;
+		String trimmedGuess = guess.trim().toLowerCase();
+
+		if (trimmedGuess.equals(gameCelebrity.getAnswer().toLowerCase())) {
+			celebGameList.remove(0);
+			if (celebGameList.size() > 0) {
+				gameCelebrity = celebGameList.get(0);
+			} else {
+				gameCelebrity = new Celebrity("", "");
+			}
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -48,7 +61,10 @@ public class CelebrityGame {
 	 * play screen.
 	 */
 	public void play() {
-
+		if (celebGameList != null && celebGameList.size() > 0) {
+			gameCelebrity = celebGameList.get(0);
+			gameWindow.replaceScreen("GAME");
+		}
 	}
 
 	/**
@@ -98,7 +114,7 @@ public class CelebrityGame {
 	 * @return Remaining number of celebrities
 	 */
 	public int getCelebrityGameSize() {
-		return celebGameList.size();  // stub
+		return celebGameList.size();
 	}
 
 	/**
@@ -108,6 +124,6 @@ public class CelebrityGame {
 	 * @return The String clue from the current celebrity.
 	 */
 	public String sendClue() {
-		return null; // stub
+		return gameCelebrity.getClue();
 	}
 }
