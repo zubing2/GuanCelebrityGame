@@ -15,7 +15,7 @@ public class CelebrityGame {
 	/**
 	 * The GUI frame for the Celebrity game.
 	 */
-	private CelebrityFrame gameWindow;
+	public CelebrityFrame gameWindow;
 	/**
 	 * The ArrayList of Celebrity values that make up the game
 	 */
@@ -65,6 +65,11 @@ public class CelebrityGame {
 			gameCelebrity = celebGameList.get(0);
 			gameWindow.replaceScreen("GAME");
 		}
+	}
+
+	public void reset() {
+		gameCelebrity = celebGameList.get(0);
+		gameWindow.replaceScreen("GAME");
 	}
 
 	/**
